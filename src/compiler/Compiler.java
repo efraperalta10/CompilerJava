@@ -15,10 +15,10 @@ public class Compiler {
      * @param args the command line arguments
      */
     
-    public String nombre = "Efrain";
-    
     public static void main(String[] args) {
         // TODO code application logic here
+        IDE ide = new IDE();
+        ide.setVisible(true);
     }
     
 }
