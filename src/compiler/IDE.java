@@ -27,16 +27,70 @@ public class IDE extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
+        btnNuevo = new javax.swing.JButton();
+        btnAbrir = new javax.swing.JButton();
+        brnReservadas = new javax.swing.JButton();
+        btnIdent = new javax.swing.JButton();
+        btnTokens = new javax.swing.JButton();
+        btnCompilar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setText("jButton1");
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(44, 44, -1, -1));
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compiler/icons/guardar_icon.png"))); // NOI18N
+        btnGuardar.setText("Guardar");
+        btnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnGuardar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, -1, -1));
+
+        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compiler/icons/nuevo_icon.png"))); // NOI18N
+        btnNuevo.setText("Nuevo");
+        btnNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNuevo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        getContentPane().add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        btnAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compiler/icons/abrir_icon.png"))); // NOI18N
+        btnAbrir.setText("Abrir");
+        btnAbrir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAbrir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        getContentPane().add(btnAbrir, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, -1, -1));
+
+        brnReservadas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compiler/icons/reservadas_icon.png"))); // NOI18N
+        brnReservadas.setText("Reservadas");
+        brnReservadas.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        brnReservadas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        getContentPane().add(brnReservadas, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, -1, -1));
+
+        btnIdent.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compiler/icons/ident_icon.png"))); // NOI18N
+        btnIdent.setText("Ident");
+        btnIdent.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnIdent.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        getContentPane().add(btnIdent, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 20, -1, -1));
+
+        btnTokens.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compiler/icons/tokens_icon.png"))); // NOI18N
+        btnTokens.setText("Tokens");
+        btnTokens.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnTokens.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        getContentPane().add(btnTokens, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 20, -1, -1));
+
+        btnCompilar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compiler/icons/compilar_icon.png"))); // NOI18N
+        btnCompilar.setText("Compilar");
+        btnCompilar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCompilar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        getContentPane().add(btnCompilar, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 20, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -74,6 +128,12 @@ public class IDE extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton brnReservadas;
+    private javax.swing.JButton btnAbrir;
+    private javax.swing.JButton btnCompilar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnIdent;
+    private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnTokens;
     // End of variables declaration//GEN-END:variables
 }

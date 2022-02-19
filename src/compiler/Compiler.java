@@ -20,5 +20,4 @@ public class Compiler {
         IDE ide = new IDE();
         ide.setVisible(true);
     }
-    
 }
