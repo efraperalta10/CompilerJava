@@ -10,12 +10,16 @@ package compiler;
  * @author efrap
  */
 public class IDE extends javax.swing.JFrame {
+    
+    NumeroLinea numeroLinea;
+    Directorio dir;
 
     /**
      * Creates new form IDE
      */
     public IDE() {
         initComponents();
+        inicializar();
     }
 
     /**
@@ -34,6 +38,10 @@ public class IDE extends javax.swing.JFrame {
         btnIdent = new javax.swing.JButton();
         btnTokens = new javax.swing.JButton();
         btnCompilar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtpCode = new javax.swing.JTextPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtaCompiler = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -53,24 +61,44 @@ public class IDE extends javax.swing.JFrame {
         btnNuevo.setText("Nuevo");
         btnNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNuevo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
         btnAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compiler/icons/abrir_icon.png"))); // NOI18N
         btnAbrir.setText("Abrir");
         btnAbrir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAbrir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAbrirActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnAbrir, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, -1, -1));
 
         brnReservadas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compiler/icons/reservadas_icon.png"))); // NOI18N
         brnReservadas.setText("Reservadas");
         brnReservadas.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         brnReservadas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        brnReservadas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                brnReservadasActionPerformed(evt);
+            }
+        });
         getContentPane().add(brnReservadas, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, -1, -1));
 
         btnIdent.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compiler/icons/ident_icon.png"))); // NOI18N
         btnIdent.setText("Ident");
         btnIdent.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnIdent.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnIdent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIdentActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnIdent, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 20, -1, -1));
 
         btnTokens.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compiler/icons/tokens_icon.png"))); // NOI18N
@@ -85,12 +113,63 @@ public class IDE extends javax.swing.JFrame {
         btnCompilar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         getContentPane().add(btnCompilar, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 20, -1, -1));
 
+        jtpCode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtpCodeKeyReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jtpCode);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 1240, 370));
+
+        jtaCompiler.setColumns(20);
+        jtaCompiler.setRows(5);
+        jScrollPane2.setViewportView(jtaCompiler);
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 526, 1240, 170));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
+        dir.Guardar(this);
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        // TODO add your handling code here:
+        jtaCompiler.setText("");
+        dir.Nuevo(this);
+        clearAllComp();
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirActionPerformed
+        // TODO add your handling code here:
+        dir.Abrir(this);
+        clearAllComp();
+    }//GEN-LAST:event_btnAbrirActionPerformed
+
+    private void brnReservadasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnReservadasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_brnReservadasActionPerformed
+
+    private void btnIdentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIdentActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnIdentActionPerformed
+
+    private void jtpCodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtpCodeKeyReleased
+        // TODO add your handling code here:
+        int keyCode = evt.getKeyCode();
+        if((keyCode >= 65 && keyCode <= 90) || (keyCode >= 48 && keyCode <=57)
+                || (keyCode >= 97 && keyCode <= 122) || (keyCode != 27 && (keyCode >= 37
+                && keyCode <= 40) && !(keyCode >= 16
+                && keyCode <= 18) && keyCode != 524
+                && keyCode != 20)){
+            if(!getTitle().contains("*")){
+                setTitle(getTitle() + "*");
+            }
+        }
+    }//GEN-LAST:event_jtpCodeKeyReleased
 
     /**
      * @param args the command line arguments
@@ -126,6 +205,20 @@ public class IDE extends javax.swing.JFrame {
             }
         });
     }
+    
+    private void inicializar(){
+        dir = new Directorio();
+        
+        setTitle("IDE");
+        String[] options = new String[]{"Guardar y continuar", "Descargar"};
+        
+        numeroLinea = new NumeroLinea(jtpCode);
+        jScrollPane1.setRowHeaderView(numeroLinea);
+    }
+    
+    public void clearAllComp(){
+        jtaCompiler.setText("");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton brnReservadas;
@@ -135,5 +228,9 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JButton btnIdent;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnTokens;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jtaCompiler;
+    public javax.swing.JTextPane jtpCode;
     // End of variables declaration//GEN-END:variables
 }
