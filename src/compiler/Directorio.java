@@ -66,7 +66,7 @@ public class Directorio {
     
     public boolean guardarEditNuevo(File fileG, JFileChooser selecFileG, IDE compF){
         int x;
-        if(compF.getTitle().equals("[#EmptyStack]*"))
+        if(compF.getTitle().equals("CompilerJava*"))
             x = 0;
         else
             x = JOptionPane.showOptionDialog(compF, "El archivo actual está siendo editado, ¿desea guardar los cambios?",
@@ -78,7 +78,7 @@ public class Directorio {
                     compF.setTitle(fileG.getName());
                     
             }
-            else if(compF.getTitle().equals("[#EmptyStack]*")){
+            else if(compF.getTitle().equals("CompilerJava*")){
                 int y = JOptionPane.showOptionDialog(compF, "¿Desea guardar el archivo actual?",
                                                     "¿Descartar edición de archivo nuevo?", -1, 3, null, options, options[0]);
                 if(y==0){
@@ -86,7 +86,7 @@ public class Directorio {
                         fileG = selecFileG.getSelectedFile();
                         String fileGname = fileG.getName();
                 
-                        if(fileGname.endsWith(".emst")){
+                        if(fileGname.endsWith(".java")){
                             if(!fileGname.split("[.]")[0].replace(" ","").equals("")){
                                 if(!fileG.exists())
                                     guardarArch(fileG, compF);  
@@ -106,7 +106,7 @@ public class Directorio {
                             }
                         }
                         else{
-                            JOptionPane.showMessageDialog(compF, "El archivo debe de tener la extensión '.emst'",
+                            JOptionPane.showMessageDialog(compF, "El archivo debe de tener la extensión '.java'",
                                                           "Extensión inválida", 2); 
                             return false;
                         }
@@ -131,7 +131,7 @@ public class Directorio {
     
     public boolean guardarEditAbrir(File fileG, JFileChooser selecFileG, IDE compF){
         int x;
-        if(compF.getTitle().equals("[#EmptyStack]*"))
+        if(compF.getTitle().equals("CompilerJava*"))
             x = 0;
         else
             x = JOptionPane.showOptionDialog(compF, "El archivo actual está siendo editado, ¿desea guardar los cambios?",
@@ -143,7 +143,7 @@ public class Directorio {
                     compF.setTitle(fileG.getName());
                     
             }
-            else if(compF.getTitle().equals("[#EmptyStack]*")){
+            else if(compF.getTitle().equals("CompilerJava*")){
                 int y = JOptionPane.showOptionDialog(compF, "¿Desea guardar el archivo actual?",
                                                     "¿Descartar edición de archivo nuevo?", -1, 3, null, options, options[0]);
                
@@ -152,7 +152,7 @@ public class Directorio {
                         fileG = selecFileG.getSelectedFile();
                         String fileGname = fileG.getName();
                 
-                        if(fileGname.endsWith(".emst")){
+                        if(fileGname.endsWith(".java")){
                             if(!fileGname.split("[.]")[0].replace(" ","").equals("")){
                                 if(!fileG.exists())
                                     guardarArch(fileG, compF);  
@@ -173,7 +173,7 @@ public class Directorio {
                             }
                         }
                         else{
-                            JOptionPane.showMessageDialog(compF, "El archivo debe de tener la extensión '.emst'",
+                            JOptionPane.showMessageDialog(compF, "El archivo debe de tener la extensión '.java'",
                                                           "Extensión inválida", 2); 
                             return false;
                         }
@@ -182,7 +182,7 @@ public class Directorio {
                 }
                 else{
                      compF.jtpCode.setText("");
-                     compF.setTitle("[#EmptyStack]");
+                     compF.setTitle("CompilerJava");
                 }
             }
             else{
@@ -195,7 +195,7 @@ public class Directorio {
         }
         else{
             compF.jtpCode.setText("");
-            compF.setTitle("[#EmptyStack]");
+            compF.setTitle("CompilerJava");
         }
         return true;
     }
@@ -215,14 +215,14 @@ public class Directorio {
         
         if(compF.getTitle().contains("*")){
             if(guardarEditNuevo(file, selecFile, compF)){
-                compF.setTitle("[#EmptyStack]");
+                compF.setTitle("CompilerJava");
                 compF.jtpCode.setText("");
                 selecFile = new JFileChooser();
                 file = null;
             }
         }
         else{
-            compF.setTitle("[#EmptyStack]");
+            compF.setTitle("CompilerJava");
             compF.jtpCode.setText("");
             selecFile = new JFileChooser();
             file = null;
@@ -245,7 +245,7 @@ public class Directorio {
             String filename = tFile.getName();
              
 
-            if(filename.endsWith(".emst")){
+            if(filename.endsWith(".java")){
                 if(!filename.split("[.]")[0].replace(" ","").equals("")){
                     if(!tFile.exists())
                         JOptionPane.showMessageDialog(compF, "El archivo que sea desea abrir no existe en el directorio especificado",
@@ -274,7 +274,7 @@ public class Directorio {
                 }
             }
             else{
-                JOptionPane.showMessageDialog(compF, "El archivo debe de tener la extensión '.emst'",
+                JOptionPane.showMessageDialog(compF, "El archivo debe de tener la extensión '.java'",
                                              "Extensión inválida", 2);  
                 return false;
             }
@@ -345,7 +345,7 @@ public class Directorio {
                 tFile = tSelecFile.getSelectedFile();
                 String filename = tFile.getName();
                 
-                if(filename.endsWith(".emst")){
+                if(filename.endsWith(".java")){
                     if(!filename.split("[.]")[0].replace(" ","").equals("")){
                         if(!tFile.exists()){
                             guardarArch(tFile, compF);  
@@ -376,7 +376,7 @@ public class Directorio {
                     }
                 }
                 else{
-                    JOptionPane.showMessageDialog(compF, "El archivo debe de tener la extensión '.emst'",
+                    JOptionPane.showMessageDialog(compF, "El archivo debe de tener la extensión '.java'",
                                                   "Extensión inválida", 2); 
                     selecFile = new JFileChooser();
                     file = null;
@@ -398,7 +398,7 @@ public class Directorio {
             tFile = tSelecFile.getSelectedFile();
             String filename = tFile.getName();
                 
-            if(filename.endsWith(".emst")){
+            if(filename.endsWith(".java")){
                 if(!filename.split("[.]")[0].replace(" ","").equals("")){
                     guardarArch(tFile, compF);  
                     file = tFile;
@@ -409,7 +409,7 @@ public class Directorio {
                                                  "Nombre inválido", 2); 
             }
             else
-                JOptionPane.showMessageDialog(compF, "El archivo debe de tener la extensión '.emst'",
+                JOptionPane.showMessageDialog(compF, "El archivo debe de tener la extensión '.javaaaaa'",
                                              "Extensión inválida", 2);  
         }
     }
