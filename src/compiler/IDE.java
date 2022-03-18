@@ -5,6 +5,14 @@
  */
 package compiler;
 
+import java.awt.Color;
+import javax.swing.JTextPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+
 /**
  *
  * @author efrap
@@ -20,6 +28,84 @@ public class IDE extends javax.swing.JFrame {
     public IDE() {
         initComponents();
         inicializar();
+        colors();
+    }
+    
+    //Metodo para encontrar las ultimas cadenas
+    private int findLastNonWordChar(String text, int index){
+        while(--index >= 0){
+            // \\W = [A-Za-z0-9]
+            if(String.valueOf(text.charAt(index)).matches("\\W")){
+                break;
+            }
+        }
+        return index;
+    }
+    
+    //Metodo para encontrar las primeras cadenas
+    private int findFirstNonWordChar(String text, int index){
+        while(index < text.length()){
+            if(String.valueOf(text.charAt(index)).matches("\\W")){
+                break;
+            }
+        }
+        return index;
+    }
+    
+    //Metodo para dibujar las palabras reservadas
+    private void colors(){
+        final StyleContext cont = StyleContext.getDefaultStyleContext();
+        
+        //Colores 
+        final AttributeSet attred = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, new Color(249, 249, 249));
+        final AttributeSet attgreen = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, new Color(144, 56, 107));
+        final AttributeSet attblue = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, new Color(144, 56, 107));
+        final AttributeSet attblack = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, new Color(0, 0, 0));
+        final AttributeSet attpurple = cont.addAttribute(cont.getEmptySet(), StyleConstants.Foreground, new Color(144, 0, 144));
+        
+        //Estilo 
+        DefaultStyledDocument doc = new DefaultStyledDocument(){
+            public void insertString(int offset, String str, AttributeSet a) throws BadLocationException{
+                super.insertString(offset, str, a);
+                
+                String text = getText(0, getLength());
+                int before = findLastNonWordChar(text, offset);
+                if(before < 0){
+                    before = 0;
+                }
+                int after = findFirstNonWordChar(text, offset+str.length());
+                int wordL = before;
+                int wordR = before;
+                
+                while(wordR <= after){
+                    if(wordR == after || String.valueOf(text.charAt(wordR)).matches("\\W")){
+                        if(text.substring(wordL, wordR).matches("(\\W)*(if|else|while|do)")){
+                            setCharacterAttributes(wordL, wordR - wordL, attblue, false);
+                        }
+                        else{
+                            setCharacterAttributes(wordL, wordR - wordL, attblack, false);
+                        }
+                    wordL = wordR;
+                    }
+                    wordR++;
+                }
+            }
+            
+            public void romeve(int offs, int len) throws BadLocationException{
+                super.remove(offs, len);
+                
+                String text = getText(0, getLength());
+                int before = findLastNonWordChar(text, offs);
+                if(before < 0){
+                    before = 0;
+                }
+            }
+        };
+        
+        JTextPane txt = new JTextPane(doc);
+        String temp = jtpCode.getText();
+        jtpCode.setStyledDocument(txt.getStyledDocument());
+        jtpCode.setText(temp);
     }
 
     /**
