@@ -77,9 +77,9 @@ public class IDE extends javax.swing.JFrame {
                 int wordL = before;
                 int wordR = before;
                 
-                while(wordR <= after){
+                while(wordR <= after){//colocar palabras reservadas
                     if(wordR == after || String.valueOf(text.charAt(wordR)).matches("\\W")){
-                        if(text.substring(wordL, wordR).matches("(\\W)*(if|else|while|do)")){
+                        if(text.substring(wordL, wordR).matches("(\\W)*(program|if|else|fi|while|do|until|read|write|float|int|bool|not|and|or)")){
                             setCharacterAttributes(wordL, wordR - wordL, attblue, false);
                         }
                         else{
@@ -90,7 +90,7 @@ public class IDE extends javax.swing.JFrame {
                     wordR++;
                 }
             }
-            
+            //sobrecarga de metodo para ver en tiempo real la eliminacion de color, cuando no es una palabra reservada
             public void romeve(int offs, int len) throws BadLocationException{
                 super.remove(offs, len);
                 
@@ -101,7 +101,7 @@ public class IDE extends javax.swing.JFrame {
                 }
             }
         };
-        
+        //mostrarlo en el panel
         JTextPane txt = new JTextPane(doc);
         String temp = jtpCode.getText();
         jtpCode.setStyledDocument(txt.getStyledDocument());
