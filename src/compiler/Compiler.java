@@ -5,6 +5,8 @@
  */
 package compiler;
 
+import java.io.File;
+
 /**
  *
  * @author efrap
@@ -17,7 +19,14 @@ public class Compiler {
     
     public static void main(String[] args) {
         // TODO code application logic here
+        String ruta="C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Lexer.flex";
+        generarLexer(ruta);
         IDE ide = new IDE();
         ide.setVisible(true);
+    }
+
+    public static void generarLexer(String ruta){
+        File archivo = new File(ruta);
+        JFlex.Main.generate(archivo);
     }
 }

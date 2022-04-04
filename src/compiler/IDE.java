@@ -6,6 +6,15 @@
 package compiler;
 
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -128,6 +137,8 @@ public class IDE extends javax.swing.JFrame {
         jtpCode = new javax.swing.JTextPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtaCompiler = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtResultado = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -197,6 +208,11 @@ public class IDE extends javax.swing.JFrame {
         btnCompilar.setText("Compilar");
         btnCompilar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnCompilar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCompilar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCompilarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnCompilar, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 20, -1, -1));
 
         jtpCode.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -206,13 +222,19 @@ public class IDE extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jtpCode);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 1240, 370));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 750, 370));
 
         jtaCompiler.setColumns(20);
         jtaCompiler.setRows(5);
         jScrollPane2.setViewportView(jtaCompiler);
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 526, 1240, 170));
+
+        txtResultado.setColumns(20);
+        txtResultado.setRows(5);
+        jScrollPane3.setViewportView(txtResultado);
+
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 130, 470, 370));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -256,6 +278,47 @@ public class IDE extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jtpCodeKeyReleased
+
+    private void btnCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompilarActionPerformed
+        // TODO add your handling code here:
+        File archivo = new File("archivo.txt");
+        PrintWriter escribir;
+        try{
+            escribir = new PrintWriter(archivo);
+            escribir.print(jtpCode.getText());
+            escribir.close();
+        }catch(FileNotFoundException ex){
+            System.out.println("Error escribir archivo.txt" + ex);
+        }
+        try{
+            Reader lector = new BufferedReader(new FileReader("archivo.txt"));
+            Lexer lexer = new Lexer(lector);
+            String resultado = "";
+            while(true){
+                Tokens tokens = lexer.yylex();
+                if(tokens ==null){
+                    resultado +="FIN";
+                    txtResultado.setText(resultado);
+                    return;
+                }
+                switch (tokens) {
+                    case ERROR:
+                        resultado += "Simbolo no definido\n";
+                        break;
+                    case Identificador: case Numero: case Reservadas:
+                        resultado += lexer.lexeme + ": Es un " + tokens + "\n";
+                        break;
+                    default:
+                        resultado += "Token: " + tokens + "\n";
+                        break;
+                }
+            }
+        }catch(FileNotFoundException ex){
+            System.out.println("Error leer archivo.txt" + ex);
+        } catch (IOException ex) {
+            Logger.getLogger(IDE.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnCompilarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -316,7 +379,9 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JButton btnTokens;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea jtaCompiler;
     public javax.swing.JTextPane jtpCode;
+    private javax.swing.JTextArea txtResultado;
     // End of variables declaration//GEN-END:variables
 }
