@@ -18,6 +18,7 @@ public enum Tokens {
     Division,
     Identificador,
     Numero,
+    Decimal,
     Potencia,
     MENOR,
     MENORIGUAL,

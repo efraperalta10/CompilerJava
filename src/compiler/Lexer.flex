@@ -27,6 +27,7 @@ or |
 while {lexeme=yytext(); return Reservadas;}
 {espacio} {/*Ignore*/}
 "//".* {/*Ignore*/}
+"/*".*"*/" {/*Ignore*/}
 "=" {return ASIGNACION;}
 "+" {return Suma;}
 "-" {return Resta;}
@@ -48,4 +49,5 @@ while {lexeme=yytext(); return Reservadas;}
 "}" {return LLAV_CIERRE;}
 {L}({L}|{D})* {lexeme=yytext(); return Identificador;}
 ("(-"{D}+")")|{D}+ {lexeme=yytext(); return Numero;}
+{D}+"."{D} {lexeme=yytext(); return Decimal;}
  . {return ERROR;}
