@@ -302,10 +302,10 @@ public class IDE extends javax.swing.JFrame {
                     return;
                 }
                 switch (tokens) {
-                    case ERROR:
+                    case Error:
                         resultado += "Simbolo no definido\n";
                         break;
-                    case Identificador: case Numero: case Reservadas: case Decimal:
+                    case Identificador: case Numero: case Decimal:
                         resultado += lexer.lexeme + ": Es un " + tokens + "\n";
                         break;
                     default:

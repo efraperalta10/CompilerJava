@@ -11,6 +11,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,10 +27,12 @@ public class Compiler {
      * @param args the command line arguments
      */
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         // TODO code application logic here
-        String ruta="C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Lexer.flex";
-        generarLexer(ruta);
+        String ruta1="C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Lexer.flex";
+        String ruta2="C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/LexerCup.flex";
+        String[] rutaS = {"-parser", "Sintax", "C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Sintax.cup"};
+        generarLexer(ruta1, ruta2, rutaS);
         /*IDE ide = new IDE();
         ide.setVisible(true);*/
         if(args.length > 0){
@@ -46,10 +51,10 @@ public class Compiler {
                         return;
                     }
                     switch (tokens) {
-                        case ERROR:
+                        case Error:
                             resultado += "Simbolo no definido\n";
                             break;
-                        case Identificador: case Numero: case Reservadas:
+                        case Identificador: case Numero: case Decimal:
                             resultado += lexer.lexeme + ": Es un " + tokens + "\n";
                             break;
                         default:
@@ -69,8 +74,29 @@ public class Compiler {
         }
     }
 
-    public static void generarLexer(String ruta){
-        File archivo = new File(ruta);
+    public static void generarLexer(String ruta1, String ruta2, String[] rutaS) throws IOException, Exception{
+        File archivo;
+        archivo = new File(ruta1);
         JFlex.Main.generate(archivo);
+        archivo = new File(ruta2);
+        JFlex.Main.generate(archivo);
+        java_cup.Main.main(rutaS);
+
+        Path rutaSym = Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/sym.java");
+        if(Files.exists(rutaSym)){
+            Files.delete(rutaSym);
+        }
+        Files.move(
+            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/sym.java"),
+            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/sym.java")
+        );
+        Path rutaSin = Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Sintax.java");
+        if(Files.exists(rutaSin)){
+            Files.delete(rutaSin);
+        }
+        Files.move(
+            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/Sintax.java"),
+            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Sintax.java")
+        );
     }
 }

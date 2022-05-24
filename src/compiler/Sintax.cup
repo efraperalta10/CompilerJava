@@ -1,0 +1,38 @@
+package compiler;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal Linea, Comillas, T_dato, Cadena, Program, If, Else, Fi, Do, Until,
+    Read, Write, Float, Int, Bool, Not, And, Or, While,
+    Asignacion, Suma, Resta, Multiplicacion, Division, Potencia, Menor, Menor_igual,
+    Mayor, Mayor_igual, Diferente, Igual, Punto_coma, Punto, Coma,
+    Par_abre, Par_cierre, Llave_abre, Llave_cierre, Main, Identificador,
+    Numero, Decimal, Error,
+    Corchete_a, Corchete_c,
+    Op_logico, Op_relacional,
+    Op_atribucion, Op_incremento, Op_booleano;
+non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
+    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR;
+
+start with INICIO;
+
+INICIO ::= 
+    Int Main Par_abre Par_cierre Llave_abre SENTENCIA Llave_cierre |
+    Main Par_abre Par_cierre Llave_abre SENTENCIA Llave_cierre
+;
+SENTENCIA ::= 
+    Int Identificador Punto_coma | Int Identificador Igual Numero Punto_coma
+;
