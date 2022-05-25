@@ -73,7 +73,7 @@ public class Directorio {
                                             "¿Descartar edición?", -1, 3, null, options, options[0]);
         if(x==0){
             if(selecFileG.getSelectedFile() != null){
-                boolean save = saveFile(fileG, compF.jtpCode.getText());
+                boolean save = saveFile(fileG, compF.txtResultado.getText());
                 if(save)
                     compF.setTitle(fileG.getName());
                     
@@ -138,7 +138,7 @@ public class Directorio {
                                             "¿Descartar edición?", -1, 3, null, options, options[0]);
         if(x==0){
             if(selecFileG.getSelectedFile() != null){
-                boolean save = saveFile(fileG, compF.jtpCode.getText());
+                boolean save = saveFile(fileG, compF.txtResultado.getText());
                 if(save)
                     compF.setTitle(fileG.getName());
                     
@@ -181,7 +181,7 @@ public class Directorio {
                     
                 }
                 else{
-                     compF.jtpCode.setText("");
+                     compF.txtResultado.setText("");
                      compF.setTitle("CompilerJava");
                 }
             }
@@ -194,7 +194,7 @@ public class Directorio {
                
         }
         else{
-            compF.jtpCode.setText("");
+            compF.txtResultado.setText("");
             compF.setTitle("CompilerJava");
         }
         return true;
@@ -202,7 +202,7 @@ public class Directorio {
     
     
     public void guardarArch(File file, IDE compF){
-        boolean save = saveFile(file, compF.jtpCode.getText());   
+        boolean save = saveFile(file, compF.txtResultado.getText());   
         if(save)
             compF.setTitle(file.getName());
         else
@@ -216,14 +216,14 @@ public class Directorio {
         if(compF.getTitle().contains("*")){
             if(guardarEditNuevo(file, selecFile, compF)){
                 compF.setTitle("CompilerJava");
-                compF.jtpCode.setText("");
+                compF.txtResultado.setText("");
                 selecFile = new JFileChooser();
                 file = null;
             }
         }
         else{
             compF.setTitle("CompilerJava");
-            compF.jtpCode.setText("");
+            compF.txtResultado.setText("");
             selecFile = new JFileChooser();
             file = null;
         }
@@ -254,7 +254,7 @@ public class Directorio {
                         String t = getTextFile(tFile);
                            
                         if(t!=null){
-                            compF.jtpCode.setText(t);
+                            compF.txtResultado.setText(t);
                             compF.setTitle(tFile.getName());
                             compF.clearAllComp();
                             selecFile = tSelecFile;
@@ -308,7 +308,7 @@ public class Directorio {
                         String t = getTextFile(tFile);
                            
                         if(t!=null){
-                            compF.jtpCode.setText(t);
+                            compF.txtResultado.setText(t);
                             compF.setTitle(tFile.getName());
                             compF.clearAllComp();
                             selecFile = tSelecFile;

@@ -37,7 +37,7 @@ while {return new Symbol(sym.While, yychar, yyline, yytext());}
 {espacio} {/*Ignore*/}
 "//".* {/*Ignore*/}
 "/*".*"*/" {/*Ignore*/}
-"=" {return new Symbol(sym.Asignacion, yychar, yyline, yytext());}
+"=" {return new Symbol(sym.Igual, yychar, yyline, yytext());}
 "+" {return new Symbol(sym.Suma, yychar, yyline, yytext());}
 "-" {return new Symbol(sym.Resta, yychar, yyline, yytext());}
 "*" {return new Symbol(sym.Multiplicacion, yychar, yyline, yytext());}
@@ -48,7 +48,7 @@ while {return new Symbol(sym.While, yychar, yyline, yytext());}
 ">" {return new Symbol(sym.Mayor, yychar, yyline, yytext());}
 ">=" {return new Symbol(sym.Mayor_igual, yychar, yyline, yytext());}
 "!=" {return new Symbol(sym.Diferente, yychar, yyline, yytext());}
-"==" {return new Symbol(sym.Igual, yychar, yyline, yytext());}
+"==" {return new Symbol(sym.Asignacion, yychar, yyline, yytext());}
 ";" {return new Symbol(sym.Punto_coma, yychar, yyline, yytext());}
 "." {return new Symbol(sym.Punto, yychar, yyline, yytext());}
 "," {return new Symbol(sym.Coma, yychar, yyline, yytext());}

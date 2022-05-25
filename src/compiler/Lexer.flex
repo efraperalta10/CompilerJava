@@ -29,7 +29,7 @@ while {lexeme=yytext(); return While;}
 "//".* {/*Ignore*/}
 "/*".*"*/" {/*Ignore*/}
 "\n" {return Linea;}
-"=" {lexeme=yytext(); return Asignacion;}
+"=" {lexeme=yytext(); return Igual;}
 "+" {lexeme=yytext(); return Suma;}
 "-" {lexeme=yytext(); return Resta;}
 "*" {lexeme=yytext(); return Multiplicacion;}
@@ -40,7 +40,7 @@ while {lexeme=yytext(); return While;}
 ">" {lexeme=yytext(); return Mayor;}
 ">=" {lexeme=yytext(); return Mayor_igual;}
 "!=" {lexeme=yytext(); return Diferente;}
-"==" {lexeme=yytext(); return Igual;}
+"==" {lexeme=yytext(); return Asignacion;}
 ";" {lexeme=yytext(); return Punto_coma;}
 "." {lexeme=yytext(); return Punto;}
 "," {lexeme=yytext(); return Coma;}

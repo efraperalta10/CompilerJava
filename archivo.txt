@@ -1,2 +1,4 @@
-int m = 8.7;
-/*aqasas*/
+int main(){
+int x=3;
+int y = 7;
+}

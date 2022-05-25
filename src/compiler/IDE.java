@@ -13,8 +13,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringReader;
+import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java_cup.runtime.Symbol;
+import javax.swing.JFileChooser;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -112,9 +116,180 @@ public class IDE extends javax.swing.JFrame {
         };
         //mostrarlo en el panel
         JTextPane txt = new JTextPane(doc);
-        String temp = jtpCode.getText();
-        jtpCode.setStyledDocument(txt.getStyledDocument());
-        jtpCode.setText(temp);
+        String temp = txtResultado.getText();
+        txtResultado.setStyledDocument(txt.getStyledDocument());
+        txtResultado.setText(temp);
+    }
+
+    private void analizarLexico() throws IOException{
+        int cont = 1;
+        
+        String expr = (String) txtResultado.getText();
+        Lexer lexer = new Lexer(new StringReader(expr));
+        String resultado = "LINEA " + cont + "\t\tSIMBOLO\n";
+        while (true) {
+            Tokens token = lexer.yylex();
+            if (token == null) {
+                txtAnalizarLex.setText(resultado);
+                return;
+            }
+            switch (token) {
+                case Linea:
+                    cont++;
+                    resultado += "LINEA " + cont + "\n";
+                    break;
+                /*case Comillas:
+                    resultado += "  <Comillas>\t\t" + lexer.lexeme + "\n";
+                    break;
+                case Cadena:
+                    resultado += "  <Tipo de dato>\t" + lexer.lexeme + "\n";
+                    break;
+                case T_dato:
+                    resultado += "  <Tipo de dato>\t" + lexer.lexeme + "\n";
+                    break;*/
+                case Program:
+                    resultado += "  <Reservada program>\t" + lexer.lexeme + "\n";
+                    break;
+                case If:
+                    resultado += "  <Reservada if>\t" + lexer.lexeme + "\n";
+                    break;
+                case Else:
+                    resultado += "  <Reservada else>\t" + lexer.lexeme + "\n";
+                    break;
+                case Fi:
+                    resultado += "  <Reservada fi>\t" + lexer.lexeme + "\n";
+                    break;
+                case Do:
+                    resultado += "  <Reservada do>\t" + lexer.lexeme + "\n";
+                    break;
+                case Until:
+                    resultado += "  <Reservada until>\t" + lexer.lexeme + "\n";
+                    break;
+                case While:
+                    resultado += "  <Reservada while>\t" + lexer.lexeme + "\n";
+                    break;
+                case Read:
+                    resultado += "  <Reservada read>\t" + lexer.lexeme + "\n";
+                    break;
+                case Write:
+                    resultado += "  <Reservada write>\t" + lexer.lexeme + "\n";
+                    break;
+                case Float:
+                    resultado += "  <Reservada float>\t" + lexer.lexeme + "\n";
+                    break;
+                case Int:
+                    resultado += "  <Reservada int>\t" + lexer.lexeme + "\n";
+                    break;
+                case Bool:
+                    resultado += "  <Reservada booleano>\t" + lexer.lexeme + "\n";
+                    break;
+                case Not:
+                    resultado += "  <Reservada not>\t" + lexer.lexeme + "\n";
+                    break;
+                case And:
+                    resultado += "  <Reservada and>\t" + lexer.lexeme + "\n";
+                    break;
+                case Or:
+                    resultado += "  <Reservada or>\t" + lexer.lexeme + "\n";
+                    break;
+                /*case For:
+                    resultado += "  <Reservada while>\t" + lexer.lexeme + "\n";
+                    break;*/
+                case Suma:
+                    resultado += "  <Operador suma>\t" + lexer.lexeme + "\n";
+                    break;
+                case Resta:
+                    resultado += "  <Operador resta>\t" + lexer.lexeme + "\n";
+                    break;
+                case Multiplicacion:
+                    resultado += "  <Operador multiplicacion>\t" + lexer.lexeme + "\n";
+                    break;
+                case Division:
+                    resultado += "  <Operador division>\t" + lexer.lexeme + "\n";
+                    break;
+                case Potencia:
+                    resultado += "  <Operador potencia>\t" + lexer.lexeme + "\n";
+                    break;
+                case Menor:
+                    resultado += "  <Operador menor>\t" + lexer.lexeme + "\n";
+                    break;
+                case Menor_igual:
+                    resultado += "  <Operador menor_igual>\t" + lexer.lexeme + "\n";
+                    break;
+                case Mayor:
+                    resultado += "  <Operador mayor>\t" + lexer.lexeme + "\n";
+                    break;
+                case Mayor_igual:
+                    resultado += "  <Operador mayor_igual>\t" + lexer.lexeme + "\n";
+                    break;
+                case Asignacion:
+                    resultado += "  <Operador asignacion>\t" + lexer.lexeme + "\n";
+                    break;
+                case Diferente:
+                    resultado += "  <Operador diferente>\t" + lexer.lexeme + "\n";
+                    break;
+                case Igual:
+                    resultado += "  <Operador igual>\t" + lexer.lexeme + "\n";
+                    break;
+                case Punto_coma:
+                    resultado += "  <Operador punto_coma>\t" + lexer.lexeme + "\n";
+                    break;
+                case Coma:
+                    resultado += "  <Operador coma>\t" + lexer.lexeme + "\n";
+                    break;
+                case Punto:
+                    resultado += "  <Operador punto>\t" + lexer.lexeme + "\n";
+                    break;
+                /*case Op_logico:
+                    resultado += "  <Operador logico>\t" + lexer.lexeme + "\n";
+                    break;
+                case Op_incremento:
+                    resultado += "  <Operador incremento>\t" + lexer.lexeme + "\n";
+                    break;
+                case Op_relacional:
+                    resultado += "  <Operador relacional>\t" + lexer.lexeme + "\n";
+                    break;
+                case Op_atribucion:
+                    resultado += "  <Operador atribucion>\t" + lexer.lexeme + "\n";
+                    break;*/
+                case Par_abre:
+                    resultado += "  <Parentesis de apertura>\t" + lexer.lexeme + "\n";
+                    break;
+                case Par_cierre:
+                    resultado += "  <Parentesis de cierre>\t" + lexer.lexeme + "\n";
+                    break;
+                case Llave_abre:
+                    resultado += "  <Llave de apertura>\t" + lexer.lexeme + "\n";
+                    break;
+                case Llave_cierre:
+                    resultado += "  <Llave de cierre>\t" + lexer.lexeme + "\n";
+                    break;
+                /*case Corchete_a:
+                    resultado += "  <Corchete de apertura>\t" + lexer.lexeme + "\n";
+                    break;
+                case Corchete_c:
+                    resultado += "  <Corchete de cierre>\t" + lexer.lexeme + "\n";
+                    break;*/
+                case Main:
+                    resultado += "  <Reservada main>\t" + lexer.lexeme + "\n";
+                    break;
+                case Identificador:
+                    resultado += "  <Identificador>\t\t" + lexer.lexeme + "\n";
+                    break;
+                case Numero:
+                    resultado += "  <Numero>\t\t" + lexer.lexeme + "\n";
+                    break;
+                case Decimal:
+                    resultado += "  <Decimal>\t\t" + lexer.lexeme + "\n";
+                    break;
+                case Error:
+                    resultado += "  <Simbolo no definido>\n";
+                    break;
+                default:
+                    resultado += "  < " + lexer.lexeme + " >\n";
+                    break;
+            }
+        }
     }
 
     /**
@@ -134,11 +309,13 @@ public class IDE extends javax.swing.JFrame {
         btnTokens = new javax.swing.JButton();
         btnCompilar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jtpCode = new javax.swing.JTextPane();
+        txtResultado = new javax.swing.JTextPane();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jtaCompiler = new javax.swing.JTextArea();
+        txtAnalizarSin = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
-        txtResultado = new javax.swing.JTextArea();
+        txtAnalizarLex = new javax.swing.JTextArea();
+        btnAnalizarLex = new javax.swing.JButton();
+        btnAnalizarSin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -215,26 +392,42 @@ public class IDE extends javax.swing.JFrame {
         });
         getContentPane().add(btnCompilar, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 20, -1, -1));
 
-        jtpCode.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtResultado.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtpCodeKeyReleased(evt);
+                txtResultadoKeyReleased(evt);
             }
         });
-        jScrollPane1.setViewportView(jtpCode);
+        jScrollPane1.setViewportView(txtResultado);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 750, 370));
 
-        jtaCompiler.setColumns(20);
-        jtaCompiler.setRows(5);
-        jScrollPane2.setViewportView(jtaCompiler);
+        txtAnalizarSin.setColumns(20);
+        txtAnalizarSin.setRows(5);
+        jScrollPane2.setViewportView(txtAnalizarSin);
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 526, 1240, 170));
 
-        txtResultado.setColumns(20);
-        txtResultado.setRows(5);
-        jScrollPane3.setViewportView(txtResultado);
+        txtAnalizarLex.setColumns(20);
+        txtAnalizarLex.setRows(5);
+        jScrollPane3.setViewportView(txtAnalizarLex);
 
         getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 130, 470, 370));
+
+        btnAnalizarLex.setText("Analizar Lexico");
+        btnAnalizarLex.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnalizarLexActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAnalizarLex, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 80, -1, -1));
+
+        btnAnalizarSin.setText("Analizar Sintactico");
+        btnAnalizarSin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnalizarSinActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAnalizarSin, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 80, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -246,15 +439,27 @@ public class IDE extends javax.swing.JFrame {
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
-        jtaCompiler.setText("");
+        txtAnalizarLex.setText("");
+        txtAnalizarSin.setText("");
         dir.Nuevo(this);
         clearAllComp();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirActionPerformed
         // TODO add your handling code here:
-        dir.Abrir(this);
-        clearAllComp();
+        //dir.Abrir(this);
+        //clearAllComp();
+        JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(null);
+        File archivo = new File(chooser.getSelectedFile().getAbsolutePath());
+        try{
+            String ST = new String(Files.readAllBytes(archivo.toPath()));
+            txtResultado.setText(ST);
+        } catch (FileNotFoundException ex) {
+            System.out.println("archivo no encontrado");
+        } catch (IOException ex){
+            System.out.println(ex);
+        }
     }//GEN-LAST:event_btnAbrirActionPerformed
 
     private void brnReservadasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brnReservadasActionPerformed
@@ -265,7 +470,7 @@ public class IDE extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnIdentActionPerformed
 
-    private void jtpCodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtpCodeKeyReleased
+    private void txtResultadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtResultadoKeyReleased
         // TODO add your handling code here:
         int keyCode = evt.getKeyCode();
         if((keyCode >= 65 && keyCode <= 90) || (keyCode >= 48 && keyCode <=57)
@@ -277,15 +482,15 @@ public class IDE extends javax.swing.JFrame {
                 setTitle(getTitle() + "*");
             }
         }
-    }//GEN-LAST:event_jtpCodeKeyReleased
+    }//GEN-LAST:event_txtResultadoKeyReleased
 
     private void btnCompilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompilarActionPerformed
         // TODO add your handling code here:
-        File archivo = new File("archivo.txt");
+        /*File archivo = new File("archivo.txt");
         PrintWriter escribir;
         try{
             escribir = new PrintWriter(archivo);
-            escribir.print(jtpCode.getText());
+            escribir.print(txtResultado.getText());
             escribir.close();
         }catch(FileNotFoundException ex){
             System.out.println("Error escribir archivo.txt" + ex);
@@ -298,7 +503,7 @@ public class IDE extends javax.swing.JFrame {
                 Tokens tokens = lexer.yylex();
                 if(tokens ==null){
                     resultado +="FIN";
-                    txtResultado.setText(resultado);
+                    txtAnalizarLex.setText(resultado);
                     return;
                 }
                 switch (tokens) {
@@ -317,8 +522,33 @@ public class IDE extends javax.swing.JFrame {
             System.out.println("Error leer archivo.txt" + ex);
         } catch (IOException ex) {
             Logger.getLogger(IDE.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }//GEN-LAST:event_btnCompilarActionPerformed
+
+    private void btnAnalizarLexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizarLexActionPerformed
+        // TODO add your handling code here:
+        try{        
+            analizarLexico();
+        } catch (IOException ex){
+            System.out.println(ex);
+        }
+    }//GEN-LAST:event_btnAnalizarLexActionPerformed
+
+    private void btnAnalizarSinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnalizarSinActionPerformed
+        // TODO add your handling code here:
+        String ST = txtResultado.getText();
+        Sintax s = new Sintax(new compiler.LexerCup(new StringReader(ST)));
+
+        try {
+            s.parse();
+            txtAnalizarSin.setText("Analisis realizado OK");
+            txtAnalizarSin.setForeground(new Color(25, 111, 61));
+        } catch (Exception ex){
+            Symbol sym = s.getS();
+            txtAnalizarSin.setText("Error de sintaxis. Linea: " + (sym.right + 1) + " Columna: " + (sym.left + 1) + ", Texto: \"" + sym.value + "\"");
+            txtAnalizarSin.setForeground(Color.red);
+        }
+    }//GEN-LAST:event_btnAnalizarSinActionPerformed
 
     /**
      * @param args the command line arguments
@@ -361,17 +591,19 @@ public class IDE extends javax.swing.JFrame {
         setTitle("IDE");
         String[] options = new String[]{"Guardar y continuar", "Descargar"};
         
-        numeroLinea = new NumeroLinea(jtpCode);
+        numeroLinea = new NumeroLinea(txtResultado);
         jScrollPane1.setRowHeaderView(numeroLinea);
     }
     
     public void clearAllComp(){
-        jtaCompiler.setText("");
+        txtAnalizarSin.setText("");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton brnReservadas;
     private javax.swing.JButton btnAbrir;
+    private javax.swing.JButton btnAnalizarLex;
+    private javax.swing.JButton btnAnalizarSin;
     private javax.swing.JButton btnCompilar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnIdent;
@@ -380,8 +612,8 @@ public class IDE extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextArea jtaCompiler;
-    public javax.swing.JTextPane jtpCode;
-    private javax.swing.JTextArea txtResultado;
+    private javax.swing.JTextArea txtAnalizarLex;
+    private javax.swing.JTextArea txtAnalizarSin;
+    public javax.swing.JTextPane txtResultado;
     // End of variables declaration//GEN-END:variables
 }
