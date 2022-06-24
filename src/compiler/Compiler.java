@@ -35,10 +35,12 @@ public class Compiler {
         String ruta1="C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Lexer.flex";
         String ruta2="C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/LexerCup.flex";
         String[] rutaS = {"-parser", "Sintax", "C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Sintax.cup"};
-        generarLexer(ruta1, ruta2, rutaS);
+        //generarLexer(ruta1, ruta2, rutaS);
+        //generarLexerCmd(ruta1, ruta2, rutaS);
         /*IDE ide = new IDE();
         ide.setVisible(true);*/
         if(args.length > 0){
+            generarLexerCmd(ruta1, ruta2, rutaS);
             /*File archivo = new File(args[0]);
             System.out.println("\n***Analizador Lexicografico***\nArgumento: "+args[0]);
             try{
@@ -72,8 +74,9 @@ public class Compiler {
             }*/
             mostrarSintacticoCmd(args);
             mostrarLexicoCmd(args);
-            System.out.println("ANALISIS COMPLETADOS");
+            System.out.println("-->ANALISIS COMPLETADOS");
         }else{
+            generarLexer(ruta1, ruta2, rutaS);
             System.out.println("\nNo argumentos. Abriendo IDE...");
             IDE ide = new IDE();
             ide.setVisible(true);
@@ -102,6 +105,32 @@ public class Compiler {
         }
         Files.move(
             Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/Sintax.java"),
+            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Sintax.java")
+        );
+    }
+
+    public static void generarLexerCmd(String ruta1, String ruta2, String[] rutaS) throws IOException, Exception{
+        File archivo;
+        archivo = new File(ruta1);
+        JFlex.Main.generate(archivo);
+        archivo = new File(ruta2);
+        JFlex.Main.generate(archivo);
+        java_cup.Main.main(rutaS);
+
+        Path rutaSym = Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/sym.java");
+        if(Files.exists(rutaSym)){
+            Files.delete(rutaSym);
+        }
+        Files.move(
+            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/dist/sym.java"),
+            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/sym.java")
+        );
+        Path rutaSin = Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Sintax.java");
+        if(Files.exists(rutaSin)){
+            Files.delete(rutaSin);
+        }
+        Files.move(
+            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/dist/Sintax.java"),
             Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Sintax.java")
         );
     }
