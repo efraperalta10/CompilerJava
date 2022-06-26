@@ -15,24 +15,40 @@ parser code
 }
 :};
 
-terminal Linea, Comillas, T_dato, Cadena, Program, If, Else, Fi, Do, Until,
+terminal Linea, Program, If, Else, Fi, Do, Until,
     Read, Write, Float, Int, Bool, Not, And, Or, While,
     Asignacion, Suma, Resta, Multiplicacion, Division, Potencia, Menor, Menor_igual,
     Mayor, Mayor_igual, Diferente, Igual, Punto_coma, Punto, Coma,
     Par_abre, Par_cierre, Llave_abre, Llave_cierre, Main, Identificador,
     Numero, Decimal, Error,
+    Comillas, T_dato, Cadena,
     Corchete_a, Corchete_c,
     Op_logico, Op_relacional,
     Op_atribucion, Op_incremento, Op_booleano;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
-    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR;
+    WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, LISTA_DECLARACION,
+    LISTA_SENTENCIAS, TIPO, LISTA_ID;
+non terminal decllist,decl,stmtlist,identlist,stmt,expr,cond;
 
 start with INICIO;
 
 INICIO ::= 
     Int Main Par_abre Par_cierre Llave_abre SENTENCIA Llave_cierre |
-    Main Par_abre Par_cierre Llave_abre SENTENCIA Llave_cierre
+    Main Par_abre Par_cierre Llave_abre LISTA_DECLARACION Llave_cierre |
+    Program Llave_abre LISTA_DECLARACION Llave_cierre
 ;
 SENTENCIA ::= 
-    Int Identificador Punto_coma | Int Identificador Igual Numero Punto_coma
+    TIPO Identificador Punto_coma
+;
+LISTA_DECLARACION ::=
+    { DECLARACION }
+;
+DECLARACION ::=
+    TIPO LISTA_ID Punto_coma
+;
+TIPO ::= 
+    Int | Float | Bool
+;
+LISTA_ID ::=
+    Identificador { Coma Identificador }
 ;

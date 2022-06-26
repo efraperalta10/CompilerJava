@@ -43,7 +43,7 @@ while {lexeme=yytext(); return While;}
 "==" {lexeme=yytext(); return Asignacion;}
 ";" {lexeme=yytext(); return Punto_coma;}
 "." {lexeme=yytext(); return Punto;}
-"," {lexeme=yytext(); return Coma;}
+":" {lexeme=yytext(); return Coma;}
 "(" {lexeme=yytext(); return Par_abre;}
 ")" {lexeme=yytext(); return Par_cierre;}
 "{" {lexeme=yytext(); return Llave_abre;}

@@ -51,7 +51,7 @@ while {return new Symbol(sym.While, yychar, yyline, yytext());}
 "==" {return new Symbol(sym.Asignacion, yychar, yyline, yytext());}
 ";" {return new Symbol(sym.Punto_coma, yychar, yyline, yytext());}
 "." {return new Symbol(sym.Punto, yychar, yyline, yytext());}
-"," {return new Symbol(sym.Coma, yychar, yyline, yytext());}
+":" {return new Symbol(sym.Coma, yychar, yyline, yytext());}
 "(" {return new Symbol(sym.Par_abre, yychar, yyline, yytext());}
 ")" {return new Symbol(sym.Par_cierre, yychar, yyline, yytext());}
 "{" {return new Symbol(sym.Llave_abre, yychar, yyline, yytext());}
