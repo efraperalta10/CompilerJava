@@ -19,7 +19,7 @@ terminal Linea, Program, If, Else, Fi, Do, Until,
     Read, Write, Float, Int, Bool, Not, And, Or, While,
     Asignacion, Suma, Resta, Multiplicacion, Division, Potencia, Menor, Menor_igual,
     Mayor, Mayor_igual, Diferente, Igual, Punto_coma, Punto, Coma,
-    Par_abre, Par_cierre, Llave_abre, Llave_cierre, Main, Identificador,
+    Par_abre, Par_cierre, Llave_abre, Llave_cierre, Main, Then, Identificador,
     Numero, Decimal, Error,
     Comillas, T_dato, Cadena,
     Corchete_a, Corchete_c,
@@ -27,15 +27,18 @@ terminal Linea, Program, If, Else, Fi, Do, Until,
     Op_atribucion, Op_incremento, Op_booleano;
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, LISTA_DECLARACION,
-    LISTA_SENTENCIAS, TIPO, LISTA_ID;
-non terminal decllist,decl,stmtlist,identlist,stmt,expr,cond;
+    LISTA_SENTENCIAS, TIPO, LISTA_ID, SENTENCIAS, SELECCION, ITERACION, REPETICION, 
+    SENT_READ, SENT_WRITE, BLOQUE, ASIGNACION, B_EXPRESION,
+    B_TERM, NOT_FACTOR, B_FACTOR, RELACION, RELOP, EXPRESION, TERMINO, SUMA_OP,
+    SIGNOFACTOR, MULT_OP, FACTOR;
+non terminal decllist,decl,stmtlist,identlist,stmt,EXPR,COND;
 
 start with INICIO;
 
 INICIO ::= 
     Int Main Par_abre Par_cierre Llave_abre SENTENCIA Llave_cierre |
     Main Par_abre Par_cierre Llave_abre LISTA_DECLARACION Llave_cierre |
-    Program Llave_abre LISTA_DECLARACION Llave_cierre
+    Program Llave_abre LISTA_DECLARACION LISTA_SENTENCIAS Llave_cierre
 ;
 SENTENCIA ::= 
     TIPO Identificador Punto_coma
@@ -50,5 +53,99 @@ TIPO ::=
     Int | Float | Bool
 ;
 LISTA_ID ::=
+    Identificador |
     Identificador { Coma Identificador }
+;
+LISTA_SENTENCIAS ::=
+    SENTENCIAS
+;
+SENTENCIAS ::=
+    If Par_abre COND Par_cierre Then BLOQUE Fi |
+    If Par_abre COND Par_cierre Then BLOQUE Else BLOQUE Fi |
+    While Par_abre COND Par_cierre BLOQUE |
+    Do BLOQUE Until Par_abre COND Par_cierre Punto_coma |
+    Read Identificador Punto_coma |
+    Write Identificador Punto_coma |
+    Llave_abre LISTA_SENTENCIAS Llave_cierre |
+    Identificador Igual COND Punto_coma
+;
+SELECCION ::=
+    If Par_abre B_EXPRESION Par_cierre Then BLOQUE Else BLOQUE Fi
+;
+ITERACION ::=
+    While Par_abre B_EXPRESION Par_cierre BLOQUE
+;
+REPETICION ::=
+    Do BLOQUE Until Par_abre B_EXPRESION Par_cierre Punto_coma
+;
+SENT_READ ::=
+    Read Identificador Punto_coma
+;
+SENT_WRITE ::=
+    Write B_EXPRESION Punto_coma
+;
+BLOQUE ::=
+    Llave_abre LISTA_SENTENCIAS Llave_cierre
+;
+ASIGNACION ::=
+    Identificador Igual B_EXPRESION Punto_coma
+;
+
+B_EXPRESION ::=
+    B_TERM { Or B_TERM }
+;
+B_TERM ::=
+    NOT_FACTOR { And NOT_FACTOR }
+;
+NOT_FACTOR ::=
+    Not B_FACTOR
+;
+B_FACTOR ::=
+    Op_booleano | RELACION
+;
+
+RELACION ::=
+    EXPRESION RELOP EXPRESION
+;
+RELOP ::=
+    Menor_igual | Menor | Mayor | Mayor_igual | Asignacion | Diferente
+;
+EXPRESION ::=
+    TERMINO { SUMA_OP TERMINO }
+;
+SUMA_OP ::=
+    Suma | Resta
+;
+TERMINO ::=
+    SIGNOFACTOR { MULT_OP SIGNOFACTOR }
+;
+MULT_OP ::=
+    Multiplicacion | Division
+;
+SIGNOFACTOR ::=
+    SUMA_OP FACTOR
+;
+FACTOR ::=
+    Par_abre B_FACTOR Par_cierre | Numero | Identificador
+;
+
+
+
+COND ::=
+    Op_booleano |
+    Par_abre COND Par_cierre |
+    EXPR RELOP EXPR |
+    EXPR SUMA_OP EXPR |
+    EXPR MULT_OP EXPR |
+    Not COND |
+    EXPR And EXPR |
+    EXPR Or EXPR
+;
+EXPR ::=
+    Identificador |
+    Numero |
+    Decimal |
+    Par_abre EXPR Par_cierre |
+    SUMA_OP EXPR |
+    MULT_OP EXPR
 ;
