@@ -4,6 +4,9 @@ import java_cup.runtime.Symbol;
 
 parser code
 {:
+    public static Nodo padre; //Guardar nodos
+    public int cont = 0;      //Contar nodos
+
     private Symbol s;
     
     public void syntax_error(Symbol s){
@@ -12,7 +15,7 @@ parser code
 
     public Symbol getS(){
         return this.s;
-}
+    }
 :};
 
 terminal Linea, Program, If, Else, Fi, Do, Until,
@@ -35,26 +38,26 @@ non terminal decllist,decl,stmtlist,identlist,stmt,EXPR,COND;
 
 start with INICIO;
 
-INICIO ::= 
+INICIO ::=                                                                      
     Int Main Par_abre Par_cierre Llave_abre SENTENCIA Llave_cierre |
     Main Par_abre Par_cierre Llave_abre LISTA_DECLARACION Llave_cierre |
-    Program Llave_abre LISTA_DECLARACION LISTA_SENTENCIAS Llave_cierre
+    Program Llave_abre LISTA_DECLARACION LISTA_SENTENCIAS Llave_cierre    
 ;
 SENTENCIA ::= 
     TIPO Identificador Punto_coma
 ;
 LISTA_DECLARACION ::=
-    { DECLARACION }
+    { DECLARACION }                                                        
 ;
 DECLARACION ::=
-    TIPO LISTA_ID Punto_coma
+    TIPO LISTA_ID Punto_coma                                               
 ;
 TIPO ::= 
-    Int | Float | Bool
+    Int | Float | Bool                                                                      
 ;
 LISTA_ID ::=
     Identificador |
-    Identificador { Coma Identificador }
+    Identificador { Coma Identificador }                         
 ;
 LISTA_SENTENCIAS ::=
     SENTENCIAS
