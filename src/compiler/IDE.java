@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
@@ -192,9 +193,9 @@ public class IDE extends javax.swing.JFrame {
                 case Or:
                     resultado += "  <Reservada or>\t" + lexer.lexeme + "\n";
                     break;
-                /*case For:
-                    resultado += "  <Reservada while>\t" + lexer.lexeme + "\n";
-                    break;*/
+                case Then:
+                    resultado += "  <Reservada then>\t" + lexer.lexeme + "\n";
+                    break;
                 case Suma:
                     resultado += "  <Operador suma>\t" + lexer.lexeme + "\n";
                     break;
@@ -248,10 +249,10 @@ public class IDE extends javax.swing.JFrame {
                     break;
                 case Op_relacional:
                     resultado += "  <Operador relacional>\t" + lexer.lexeme + "\n";
-                    break;
-                case Op_atribucion:
-                    resultado += "  <Operador atribucion>\t" + lexer.lexeme + "\n";
                     break;*/
+                case Op_booleano:
+                    resultado += "  <Operador booleano>\t" + lexer.lexeme + "\n";
+                    break;
                 case Par_abre:
                     resultado += "  <Parentesis de apertura>\t" + lexer.lexeme + "\n";
                     break;

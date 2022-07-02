@@ -51,12 +51,14 @@ while {return new Symbol(sym.While, yychar, yyline, yytext());}
 "==" {return new Symbol(sym.Asignacion, yychar, yyline, yytext());}
 ";" {return new Symbol(sym.Punto_coma, yychar, yyline, yytext());}
 "." {return new Symbol(sym.Punto, yychar, yyline, yytext());}
-"," {return new Symbol(sym.Coma, yychar, yyline, yytext());}
+":" {return new Symbol(sym.Coma, yychar, yyline, yytext());}
 "(" {return new Symbol(sym.Par_abre, yychar, yyline, yytext());}
 ")" {return new Symbol(sym.Par_cierre, yychar, yyline, yytext());}
 "{" {return new Symbol(sym.Llave_abre, yychar, yyline, yytext());}
 "}" {return new Symbol(sym.Llave_cierre, yychar, yyline, yytext());}
 "main" {return new Symbol(sym.Main, yychar, yyline, yytext());}
+then {return new Symbol(sym.Then, yychar, yyline, yytext());}
+( true | false ) {return new Symbol(sym.Op_booleano, yychar, yyline, yytext());}
 {L}({L}|{D})* {return new Symbol(sym.Identificador, yychar, yyline, yytext());}
 ("(-"{D}+")")|{D}+ {return new Symbol(sym.Numero, yychar, yyline, yytext());}
 {D}+"."{D} {return new Symbol(sym.Decimal, yychar, yyline, yytext());}

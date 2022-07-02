@@ -43,12 +43,14 @@ while {lexeme=yytext(); return While;}
 "==" {lexeme=yytext(); return Asignacion;}
 ";" {lexeme=yytext(); return Punto_coma;}
 "." {lexeme=yytext(); return Punto;}
-"," {lexeme=yytext(); return Coma;}
+":" {lexeme=yytext(); return Coma;}
 "(" {lexeme=yytext(); return Par_abre;}
 ")" {lexeme=yytext(); return Par_cierre;}
 "{" {lexeme=yytext(); return Llave_abre;}
 "}" {lexeme=yytext(); return Llave_cierre;}
 "main" {lexeme=yytext(); return Main;}
+then {lexeme = yytext(); return Then;}
+(true | false) {lexeme = yytext(); return Op_booleano;}
 {L}({L}|{D})* {lexeme=yytext(); return Identificador;}
 ("(-"{D}+")")|{D}+ {lexeme=yytext(); return Numero;}
 {D}+"."{D} {lexeme=yytext(); return Decimal;}

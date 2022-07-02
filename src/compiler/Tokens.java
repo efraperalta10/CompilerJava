@@ -49,5 +49,7 @@ public enum Tokens {
     Llave_abre,
     Llave_cierre,
     Main,
+    Then,
+    Op_booleano,
     Error
 }
