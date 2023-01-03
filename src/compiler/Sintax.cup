@@ -4,7 +4,7 @@ import java_cup.runtime.Symbol;
 
 parser code
 {:
-    public static Nodo padre; //Guardar nodos
+    public Nodo padre; //Guardar nodos
     public int cont = 0;      //Contar nodos
 
     private Symbol s;
@@ -31,105 +31,606 @@ terminal Linea, Program, If, Else, Fi, Do, Until,
 non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE,
     WHILE, DO_WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, LISTA_DECLARACION,
     LISTA_SENTENCIAS, TIPO, LISTA_ID, SENTENCIAS, SELECCION, ITERACION, REPETICION, 
-    SENT_READ, SENT_WRITE, BLOQUE, ASIGNACION, B_EXPRESION,
+    SENT_READ, SENT_WRITE, BLOQUE, ASIGNACION_NT, B_EXPRESION,
     B_TERM, NOT_FACTOR, B_FACTOR, RELACION, RELOP, EXPRESION, TERMINO, SUMA_OP,
-    SIGNOFACTOR, MULT_OP, FACTOR;
+    SIGNOFACTOR, MULT_OP, FACTOR,B_EXPRESION2, B_TERM2, TERMINO2, EXPRESION2, BLOQUE_ELSE, LISTA_ID2,NOT_LIST,RELACION2;
 non terminal decllist,decl,stmtlist,identlist,stmt,EXPR,COND;
 
 start with INICIO;
 
 INICIO ::=                                                                      
-    Int Main Par_abre Par_cierre Llave_abre SENTENCIA Llave_cierre |
-    Main Par_abre Par_cierre Llave_abre LISTA_DECLARACION Llave_cierre |
-    Program Llave_abre LISTA_DECLARACION LISTA_SENTENCIAS Llave_cierre    
-;
-SENTENCIA ::= 
-    TIPO Identificador Punto_coma
+    
+    Program Llave_abre LISTA_DECLARACION:n1 LISTA_SENTENCIAS:n2 Llave_cierre    
+    {:
+        Nodo nd = new Nodo("Program");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)n1);
+        nd.addHijos((Nodo)n2);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
 ;
 LISTA_DECLARACION ::=
-    { DECLARACION }                                                        
+    DECLARACION:d LISTA_DECLARACION:ld 
+    {:
+        Nodo nd = new Nodo("Lista_declaracion");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)d);
+        nd.addHijos((Nodo)ld);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+    | '\0'
 ;
 DECLARACION ::=
-    TIPO LISTA_ID Punto_coma                                               
+    TIPO:t LISTA_ID:li Punto_coma
+    {:
+        Nodo nd = new Nodo("Declaracion");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)t);
+        nd.addHijos((Nodo)li);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
 ;
 TIPO ::= 
-    Int | Float | Bool                                                                      
+    Int:_int
+    {:
+        Nodo nd = new Nodo("TipoInt");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.setValor(_int.toString());
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+    | Float:_float 
+    {:
+        Nodo nd = new Nodo("TipoFloat");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.setValor(_float.toString());
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+    | Bool:_bool                                                                      
+    {:
+        Nodo nd = new Nodo("TipoBool");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.setValor(_bool.toString());
+        System.out.println("OK");
+        RESULT = nd;
+    :}
 ;
 LISTA_ID ::=
-    Identificador |
-    Identificador { Coma Identificador }                         
+    Identificador:ident LISTA_ID2:li2
+    {:
+        Nodo nd = new Nodo("Id");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.setValor(ident.toString());
+        System.out.println("OK");
+
+        Nodo nd1 = new Nodo("Lista_id");
+        nd1.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd1;
+        nd1.addHijos((Nodo)li2);
+        System.out.println("OK");
+        RESULT = nd1;
+    :}
+;
+LISTA_ID2 ::=
+    |
+    Coma Identificador:ident LISTA_ID2:li2
+    {:
+        Nodo nd = new Nodo("Id2");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.setValor(ident.toString());
+        System.out.println("OK");
+
+        Nodo nd1 = new Nodo("Lista_id2");
+        nd1.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd1;
+        nd1.addHijos((Nodo)li2);
+        System.out.println("OK");
+        RESULT = nd1;
+    :}
 ;
 LISTA_SENTENCIAS ::=
-    SENTENCIAS
+    SENTENCIAS:s LISTA_SENTENCIAS:ls
+    {:
+        Nodo nd = new Nodo("Lista_sentencias");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)s);
+        nd.addHijos((Nodo)ls);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+    | '\0'
 ;
 SENTENCIAS ::=
-    If Par_abre COND Par_cierre Then BLOQUE Fi |
-    If Par_abre COND Par_cierre Then BLOQUE Else BLOQUE Fi |
-    While Par_abre COND Par_cierre BLOQUE |
-    Do BLOQUE Until Par_abre COND Par_cierre Punto_coma |
-    Read Identificador Punto_coma |
-    Write Identificador Punto_coma |
-    Llave_abre LISTA_SENTENCIAS Llave_cierre |
-    Identificador Igual COND Punto_coma
+    SELECCION:s
+    {:
+        Nodo nd = new Nodo("Sentencias");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)s);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+    | ITERACION:i
+    {:
+        Nodo nd = new Nodo("Sentencias");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)i);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+    | REPETICION:r
+    {:
+        Nodo nd = new Nodo("Sentencias");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)r);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+    | SENT_READ:sr
+    {:
+        Nodo nd = new Nodo("Sentencias");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)sr);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+    | SENT_WRITE:sw
+    {:
+        Nodo nd = new Nodo("Sentencias");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)sw);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+    | BLOQUE:b
+    {:
+        Nodo nd = new Nodo("Sentencias");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)b);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+    | ASIGNACION_NT:a
+    {:
+        Nodo nd = new Nodo("Sentencias");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)a);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
 ;
 SELECCION ::=
-    If Par_abre B_EXPRESION Par_cierre Then BLOQUE Else BLOQUE Fi
+    If Par_abre B_EXPRESION:bexp Par_cierre Then BLOQUE:b BLOQUE_ELSE:be Fi
+    {:
+        Nodo nd = new Nodo("Seleccion");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)bexp);
+        nd.addHijos((Nodo)b);
+        nd.addHijos((Nodo)be);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+;
+BLOQUE_ELSE ::=
+    |
+    Else:e BLOQUE:b
+    {:
+        Nodo nd = new Nodo("Else");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.setValor(e.toString());
+        System.out.println("OK");
+
+        Nodo nd1 = new Nodo("Bloque_else");
+        nd1.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd1;
+        nd1.addHijos((Nodo)b);
+        System.out.println("OK");
+        RESULT = nd1;
+    :}
 ;
 ITERACION ::=
-    While Par_abre B_EXPRESION Par_cierre BLOQUE
+    While Par_abre B_EXPRESION:bexp Par_cierre BLOQUE:b
+    {:
+        Nodo nd = new Nodo("Iteracion");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)bexp);
+        nd.addHijos((Nodo)b);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
 ;
 REPETICION ::=
-    Do BLOQUE Until Par_abre B_EXPRESION Par_cierre Punto_coma
+    Do BLOQUE:b Until Par_abre B_EXPRESION:bexp Par_cierre Punto_coma
+    {:
+        Nodo nd = new Nodo("Repeticion");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)b);
+        nd.addHijos((Nodo)bexp);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
 ;
 SENT_READ ::=
-    Read Identificador Punto_coma
+    Read:r Identificador:ident Punto_coma
+    {:
+        Nodo nd = new Nodo(r.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+
+        Nodo nd1 = new Nodo(ident.toString());
+        nd1.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd1;
+        RESULT = nd1;
+    :}
 ;
 SENT_WRITE ::=
-    Write B_EXPRESION Punto_coma
+    Write:w B_EXPRESION:bexp Punto_coma
+    {:
+        Nodo nd = new Nodo(w.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+
+        Nodo nd1 = new Nodo("Sent_write");
+        nd1.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd1;
+        nd1.addHijos((Nodo)bexp);
+        System.out.println("OK");
+        RESULT = nd1;
+    :}
 ;
 BLOQUE ::=
-    Llave_abre LISTA_SENTENCIAS Llave_cierre
+    Llave_abre LISTA_SENTENCIAS:ls Llave_cierre
+    {:
+        Nodo nd = new Nodo("Bloque");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)ls);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
 ;
-ASIGNACION ::=
-    Identificador Igual B_EXPRESION Punto_coma
+ASIGNACION_NT ::=
+    Identificador:ident Igual:igual B_EXPRESION:bexp Punto_coma
+    {:
+        Nodo nd = new Nodo(ident.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+
+        Nodo nd1 = new Nodo(igual.toString());
+        nd1.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd1;
+        RESULT = nd1;
+
+        Nodo nd2 = new Nodo("Asignacion_nt");
+        nd2.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd2;
+        nd2.addHijos((Nodo)bexp);
+        System.out.println("OK");
+        RESULT = nd2;
+    :}
 ;
 
 B_EXPRESION ::=
-    B_TERM { Or B_TERM }
+    B_TERM:bt B_EXPRESION2:be2
+    {:
+        Nodo nd = new Nodo("B_expresion");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)bt);
+        nd.addHijos((Nodo)be2);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+;
+B_EXPRESION2 ::=
+    |
+    Or B_TERM:bt B_EXPRESION2:be
+    {:
+        Nodo nd = new Nodo("B_expresion2");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)bt);
+        nd.addHijos((Nodo)be);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
 ;
 B_TERM ::=
-    NOT_FACTOR { And NOT_FACTOR }
+    NOT_FACTOR:nf B_TERM2:bt2
+    {:
+        Nodo nd = new Nodo("B_term");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)nf);
+        nd.addHijos((Nodo)bt2);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+;
+B_TERM2 ::=
+    | And NOT_FACTOR:nf B_TERM2:bt2
+    {:
+        Nodo nd = new Nodo("B_term2");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)nf);
+        nd.addHijos((Nodo)bt2);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
 ;
 NOT_FACTOR ::=
-    Not B_FACTOR
+    NOT_LIST:nl B_FACTOR:bf
+    {:
+        Nodo nd = new Nodo("Not_factor");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)nl);
+        nd.addHijos((Nodo)bf);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+;
+NOT_LIST ::=
+    |
+    Not:n NOT_LIST:nl
+    {:
+        Nodo nd = new Nodo(n.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+
+        Nodo nd2 = new Nodo("Not_list");
+        nd2.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd2;
+        nd2.addHijos((Nodo)nl);
+        System.out.println("OK");
+        RESULT = nd2;
+    :}
 ;
 B_FACTOR ::=
-    Op_booleano | RELACION
+    Op_booleano:ob
+    {:
+        Nodo nd = new Nodo(ob.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+    :}
+    | RELACION:rel
+    {:
+        Nodo nd2 = new Nodo("B_factor");
+        nd2.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd2;
+        nd2.addHijos((Nodo)rel);
+        System.out.println("OK");
+        RESULT = nd2;
+    :}
 ;
 
 RELACION ::=
-    EXPRESION RELOP EXPRESION
+    EXPRESION:e RELACION2:r2
+    {:
+        Nodo nd = new Nodo("Relacion");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)e);
+        nd.addHijos((Nodo)r2);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+;
+RELACION2 ::=
+    |
+    RELOP:ro EXPRESION:e RELACION2:r2
+    {:
+        Nodo nd = new Nodo("Relacion2");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)ro);
+        nd.addHijos((Nodo)e);
+        nd.addHijos((Nodo)r2);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
 ;
 RELOP ::=
-    Menor_igual | Menor | Mayor | Mayor_igual | Asignacion | Diferente
+    Menor_igual:meni
+    {:
+        Nodo nd = new Nodo(meni.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+    :}
+    | Menor:men
+    {:
+        Nodo nd = new Nodo(men.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+    :}
+    | Mayor:ma
+    {:
+        Nodo nd = new Nodo(ma.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+    :}
+    | Mayor_igual:mai
+    {:
+        Nodo nd = new Nodo(mai.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+    :}
+    | Asignacion:a
+    {:
+        Nodo nd = new Nodo(a.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+    :}
+    | Diferente:d
+    {:
+        Nodo nd = new Nodo(d.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+    :}
 ;
 EXPRESION ::=
-    TERMINO { SUMA_OP TERMINO }
+    TERMINO:t EXPRESION2:e2
+    {:
+        Nodo nd = new Nodo("Expresion");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)t);
+        nd.addHijos((Nodo)e2);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
 ;
-SUMA_OP ::=
-    Suma | Resta
+EXPRESION2 ::=
+    | SUMA_OP:so TERMINO:t EXPRESION2:e2
+    {:
+        Nodo nd = new Nodo("Expresion2");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)so);
+        nd.addHijos((Nodo)t);
+        nd.addHijos((Nodo)e2);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
 ;
 TERMINO ::=
-    SIGNOFACTOR { MULT_OP SIGNOFACTOR }
+    SIGNOFACTOR:sf TERMINO2:t2
+    {:
+        Nodo nd = new Nodo("Termino");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)sf);
+        nd.addHijos((Nodo)t2);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+;
+TERMINO2 ::=
+    |
+    MULT_OP:mo SIGNOFACTOR:sf TERMINO2:t2
+    {:
+        Nodo nd = new Nodo("Termino2");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)mo);
+        nd.addHijos((Nodo)sf);
+        nd.addHijos((Nodo)t2);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
 ;
 MULT_OP ::=
-    Multiplicacion | Division
+    Multiplicacion:m
+    {:
+        Nodo nd = new Nodo(m.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+    :}
+    | Division:d
+    {:
+        Nodo nd = new Nodo(d.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+    :}
 ;
 SIGNOFACTOR ::=
-    SUMA_OP FACTOR
+    FACTOR:f
+    {:
+        Nodo nd = new Nodo("Signo_factor");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)f);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+    |SUMA_OP:so FACTOR:f
+    {:
+        Nodo nd = new Nodo("Termino2");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)so);
+        nd.addHijos((Nodo)f);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+;
+SUMA_OP ::=
+    Suma:s
+    {:
+        Nodo nd = new Nodo(s.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+    :}
+    | Resta:r
+    {:
+        Nodo nd = new Nodo(r.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+    :}
 ;
 FACTOR ::=
-    Par_abre B_FACTOR Par_cierre | Numero | Identificador
+    Par_abre B_EXPRESION:bexp Par_cierre
+    {:
+        Nodo nd = new Nodo("Factor");
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        nd.addHijos((Nodo)bexp);
+        System.out.println("OK");
+        RESULT = nd;
+    :}
+    | Numero:n
+    {:
+        Nodo nd = new Nodo(n.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+    :}
+    | Identificador:ident
+    {:
+        Nodo nd = new Nodo(ident.toString());
+        nd.setIdNod(parser.cont++);
+        parser.padre = (Nodo) nd;
+        RESULT = nd;
+    :}
 ;
 
 

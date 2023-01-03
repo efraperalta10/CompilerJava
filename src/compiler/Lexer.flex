@@ -3,8 +3,8 @@ import static compiler.Tokens.*;
 %%
 %class Lexer
 %type Tokens
-L=[a-zA-Z_]+
-D=[0-9]+
+L=[a-zA-Z]
+D=[0-9]
 espacio=[ ,\t,\r]+
 %{
     public String lexeme;
@@ -26,8 +26,8 @@ and {lexeme=yytext(); return And;}
 or {lexeme=yytext(); return Or;}
 while {lexeme=yytext(); return While;}
 {espacio} {/*Ignore*/}
-"//".* {/*Ignore*/}
-"/*".*"*/" {/*Ignore*/}
+"//"* {/*Ignore*/}
+"/*"*"*/" {/*Ignore*/}
 "\n" {return Linea;}
 "=" {lexeme=yytext(); return Igual;}
 "+" {lexeme=yytext(); return Suma;}
@@ -42,8 +42,8 @@ while {lexeme=yytext(); return While;}
 "!=" {lexeme=yytext(); return Diferente;}
 "==" {lexeme=yytext(); return Asignacion;}
 ";" {lexeme=yytext(); return Punto_coma;}
-"." {lexeme=yytext(); return Punto;}
-":" {lexeme=yytext(); return Coma;}
+
+"," {lexeme=yytext(); return Coma;}
 "(" {lexeme=yytext(); return Par_abre;}
 ")" {lexeme=yytext(); return Par_cierre;}
 "{" {lexeme=yytext(); return Llave_abre;}
@@ -52,6 +52,6 @@ while {lexeme=yytext(); return While;}
 then {lexeme = yytext(); return Then;}
 (true | false) {lexeme = yytext(); return Op_booleano;}
 {L}({L}|{D})* {lexeme=yytext(); return Identificador;}
-("(-"{D}+")")|{D}+ {lexeme=yytext(); return Numero;}
-{D}+"."{D} {lexeme=yytext(); return Decimal;}
+{D}{D}*(.(D)(D)*)? {lexeme=yytext(); return Numero;}
+
  . {return Error;}

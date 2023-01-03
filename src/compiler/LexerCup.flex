@@ -7,9 +7,14 @@ import java_cup.runtime.Symbol;
 %full
 %line
 %char
-L=[a-zA-Z_]+
-D=[0-9]+
-espacio=[ ,\t,\r,\n]+
+L=[a-zA-Z]
+D=[0-9]
+terminacionLinea = \r|\n|\r\n
+caracterEntrada = [^\r\n]
+espacio={terminacionLinea} | [ \t\f]
+comentarioTradicional   = "/*" [^*] ~"*/" | "/*" "*"+ "/"
+comentarioLineal     = "//" {caracterEntrada}* {terminacionLinea}?
+comentario = {comentarioTradicional} | {comentarioLineal}
 %{
     private Symbol symbol(int type, Object value){
         return new Symbol(type, yyline, yycolumn, value);
@@ -35,8 +40,6 @@ and {return new Symbol(sym.And, yychar, yyline, yytext());}
 or {return new Symbol(sym.Or, yychar, yyline, yytext());}
 while {return new Symbol(sym.While, yychar, yyline, yytext());}
 {espacio} {/*Ignore*/}
-"//".* {/*Ignore*/}
-"/*".*"*/" {/*Ignore*/}
 "=" {return new Symbol(sym.Igual, yychar, yyline, yytext());}
 "+" {return new Symbol(sym.Suma, yychar, yyline, yytext());}
 "-" {return new Symbol(sym.Resta, yychar, yyline, yytext());}
@@ -50,8 +53,8 @@ while {return new Symbol(sym.While, yychar, yyline, yytext());}
 "!=" {return new Symbol(sym.Diferente, yychar, yyline, yytext());}
 "==" {return new Symbol(sym.Asignacion, yychar, yyline, yytext());}
 ";" {return new Symbol(sym.Punto_coma, yychar, yyline, yytext());}
-"." {return new Symbol(sym.Punto, yychar, yyline, yytext());}
-":" {return new Symbol(sym.Coma, yychar, yyline, yytext());}
+
+"," {return new Symbol(sym.Coma, yychar, yyline, yytext());}
 "(" {return new Symbol(sym.Par_abre, yychar, yyline, yytext());}
 ")" {return new Symbol(sym.Par_cierre, yychar, yyline, yytext());}
 "{" {return new Symbol(sym.Llave_abre, yychar, yyline, yytext());}
@@ -60,6 +63,6 @@ while {return new Symbol(sym.While, yychar, yyline, yytext());}
 then {return new Symbol(sym.Then, yychar, yyline, yytext());}
 ( true | false ) {return new Symbol(sym.Op_booleano, yychar, yyline, yytext());}
 {L}({L}|{D})* {return new Symbol(sym.Identificador, yychar, yyline, yytext());}
-("(-"{D}+")")|{D}+ {return new Symbol(sym.Numero, yychar, yyline, yytext());}
-{D}+"."{D} {return new Symbol(sym.Decimal, yychar, yyline, yytext());}
+{D}{D}*(.{D}{D}*)? {return new Symbol(sym.Numero, yychar, yyline, yytext());}
+
  . {return new Symbol(sym.Error, yychar, yyline, yytext());}

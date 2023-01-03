@@ -238,9 +238,9 @@ public class IDE extends javax.swing.JFrame {
                 case Coma:
                     resultado += "  <Operador coma>\t" + lexer.lexeme + "\n";
                     break;
-                case Punto:
+                /*case Punto:
                     resultado += "  <Operador punto>\t" + lexer.lexeme + "\n";
-                    break;
+                    break;*/
                 /*case Op_logico:
                     resultado += "  <Operador logico>\t" + lexer.lexeme + "\n";
                     break;
@@ -280,9 +280,9 @@ public class IDE extends javax.swing.JFrame {
                 case Numero:
                     resultado += "  <Numero>\t\t" + lexer.lexeme + "\n";
                     break;
-                case Decimal:
+                /*case Decimal:
                     resultado += "  <Decimal>\t\t" + lexer.lexeme + "\n";
-                    break;
+                    break;*/
                 case Error:
                     resultado += "  <Simbolo no definido>\n";
                     break;
@@ -542,6 +542,7 @@ public class IDE extends javax.swing.JFrame {
 
         try {
             s.parse();
+            generarSemantico(s.padre, "");
             txtAnalizarSin.setText("Analisis realizado OK");
             txtAnalizarSin.setForeground(new Color(25, 111, 61));
         } catch (Exception ex){
@@ -598,6 +599,21 @@ public class IDE extends javax.swing.JFrame {
     
     public void clearAllComp(){
         txtAnalizarSin.setText("");
+    }
+    
+    public void generarSemantico(Nodo padre, String tabulacion){
+        if(padre != null){
+            if(padre.valor != null){
+                System.out.println(tabulacion + padre.etiqueta + " - " + padre.valor);
+            }else{
+                System.out.println(tabulacion + padre.etiqueta);
+            }
+            
+            tabulacion += "  ";
+            for(int i=0; i<padre.hijos.size(); i++){
+                generarSemantico(padre.hijos.get(i), tabulacion);
+            }
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

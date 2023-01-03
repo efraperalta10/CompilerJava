@@ -32,9 +32,9 @@ public class Compiler {
     
     public static void main(String[] args) throws Exception {
         // TODO code application logic here
-        String ruta1="C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Lexer.flex";
-        String ruta2="C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/LexerCup.flex";
-        String[] rutaS = {"-parser", "Sintax", "C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Sintax.cup"};
+        String ruta1="C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/src/compiler/Lexer.flex";
+        String ruta2="C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/src/compiler/LexerCup.flex";
+        String[] rutaS = {"-parser", "Sintax", "C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/src/compiler/Sintax.cup"};
         //generarLexer(ruta1, ruta2, rutaS);
         //generarLexerCmd(ruta1, ruta2, rutaS);
         /*IDE ide = new IDE();
@@ -91,21 +91,21 @@ public class Compiler {
         JFlex.Main.generate(archivo);
         java_cup.Main.main(rutaS);
 
-        Path rutaSym = Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/sym.java");
+        Path rutaSym = Paths.get("C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/src/compiler/sym.java");
         if(Files.exists(rutaSym)){
             Files.delete(rutaSym);
         }
         Files.move(
-            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/sym.java"),
-            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/sym.java")
+            Paths.get("C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/sym.java"),
+            Paths.get("C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/src/compiler/sym.java")
         );
-        Path rutaSin = Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Sintax.java");
+        Path rutaSin = Paths.get("C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/src/compiler/Sintax.java");
         if(Files.exists(rutaSin)){
             Files.delete(rutaSin);
         }
         Files.move(
-            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/Sintax.java"),
-            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Sintax.java")
+            Paths.get("C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/Sintax.java"),
+            Paths.get("C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/src/compiler/Sintax.java")
         );
     }
 
@@ -117,21 +117,21 @@ public class Compiler {
         JFlex.Main.generate(archivo);
         java_cup.Main.main(rutaS);
 
-        Path rutaSym = Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/sym.java");
+        Path rutaSym = Paths.get("C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/src/compiler/sym.java");
         if(Files.exists(rutaSym)){
             Files.delete(rutaSym);
         }
         Files.move(
-            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/dist/sym.java"),
-            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/sym.java")
+            Paths.get("C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/dist/sym.java"),
+            Paths.get("C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/src/compiler/sym.java")
         );
-        Path rutaSin = Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Sintax.java");
+        Path rutaSin = Paths.get("C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/src/compiler/Sintax.java");
         if(Files.exists(rutaSin)){
             Files.delete(rutaSin);
         }
         Files.move(
-            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/dist/Sintax.java"),
-            Paths.get("C:/Users/moy_r_000/Desktop/CompilerJava/src/compiler/Sintax.java")
+            Paths.get("C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/dist/Sintax.java"),
+            Paths.get("C:/Users/moy_r/OneDrive/Escritorio/CompilerJava/src/compiler/Sintax.java")
         );
     }
 
@@ -262,9 +262,9 @@ public class Compiler {
                 case Coma:
                     resultado += "  <Operador coma>\t\t" + lexer.lexeme + "\n";
                     break;
-                case Punto:
+                /*case Punto:
                     resultado += "  <Operador punto>\t\t" + lexer.lexeme + "\n";
-                    break;
+                    break;*/
                 case Par_abre:
                     resultado += "  <Parentesis de apertura>\t" + lexer.lexeme + "\n";
                     break;
@@ -286,9 +286,9 @@ public class Compiler {
                 case Numero:
                     resultado += "  <Numero>\t\t" + lexer.lexeme + "\n";
                     break;
-                case Decimal:
+                /*case Decimal:
                     resultado += "  <Decimal>\t\t" + lexer.lexeme + "\n";
-                    break;
+                    break;*/
                 case Error:
                     resultado += "  <Simbolo no definido>\n";
                     break;
